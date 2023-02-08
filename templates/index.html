@@ -1,0 +1,54 @@
+{% extends "index_juice.html" %}
+
+{% block favicon %}
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+{% endblock favicon %}
+
+{% block hero %}
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <div class="text-center hero-div">
+            <div class="heading-text" style="font-size: 50px">
+                Maia SDR
+            </div>
+            <div class="title-text">
+	      An open-source FPGA-based SDR project focusing on the ADALM Pluto
+            </div>
+            <div>
+                <a class="github-button" href="https://github.com/maia-sdr/maia-sdr" data-size="large" data-show-count="true"
+                    aria-label="Star maia-sdr on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/maia-sdr/maia-sdr" data-size="large"
+                    data-show-count="true" aria-label="Fork maia-sdr on GitHub">Fork</a>
+            </div>
+        </div>
+        <div class="hero-image">
+        <img style="width: 100%;"
+             alt="A screenshot of Maia SDR, showing a waterfall in the web browser"
+          src="{{ get_url(path="maia-sdr-screenshot.jpg") }}">
+        </div>
+        <div class="explore-more text"
+            onclick="document.getElementById('demo').scrollIntoView({behavior: 'smooth'})">
+            More ⇩
+        </div>
+{% endblock hero %}
+
+{% block content %}
+            {{ section.content | safe }}
+{% endblock content %}
+
+{% block footer %}
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+{% endblock footer %}
