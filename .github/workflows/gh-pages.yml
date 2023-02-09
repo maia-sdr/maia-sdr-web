@@ -1,0 +1,19 @@
+on: push
+name: Build and deploy GH Pages
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: shalzz/zola-deploy-action@71190a69bbadd5fea222346d79b960e687e898ed
+        env:
+          # Target branch
+          PAGES_BRANCH: gh-pages
+          # Provide personal access token
+          #TOKEN: ${{ secrets.TOKEN }}
+          # Or if publishing to the same repo, use the automatic token
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_THEMES: false
