@@ -12,7 +12,10 @@ order to update it with a newer version of Maia SDR.
 
 # Download the firmware image
 
-TODO
+Go to the
+[latest Maia SDR Pluto firmware release](https://github.com/maia-sdr/plutosdr-fw/releases/latest)
+and download the file `plutosdr-fw-maia-sdr-v[version].zip`. This zip file contains the
+firmware images that are used below (such as `pluto.frm`).
 
 # Flash the firmware image
 
