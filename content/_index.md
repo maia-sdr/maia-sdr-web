@@ -46,5 +46,5 @@ Zynq ARM CPU. It provides:
 * Streaming of waterfall (spectrogram) data using WebSockets.
 
 The UI is a web application (maia-wasm) written in Rust with WebAssembly. It
-uses WebGL2 to render the waterfall.
+uses WebGL2 to render the waterfall (see the [waterfall demo](waterfall-demo)).
 
