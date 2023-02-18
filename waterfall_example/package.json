@@ -1,0 +1,30 @@
+{
+  "name": "waterfall-example",
+  "collaborators": [
+    "Daniel Estevez <daniel@destevez.net>"
+  ],
+  "description": "Maia SDR waterfall example",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maia-sdr/maia-sdr/"
+  },
+  "files": [
+    "waterfall_example_bg.wasm",
+    "waterfall_example.js",
+    "waterfall_example.d.ts",
+    "LICENSE-APACHE",
+    "LICENSE-MIT"
+  ],
+  "module": "waterfall_example.js",
+  "homepage": "https://maia-sdr.org/",
+  "types": "waterfall_example.d.ts",
+  "sideEffects": false,
+  "keywords": [
+    "SDR",
+    "FPGA",
+    "wasm",
+    "WebGL2"
+  ]
+}
