@@ -128,6 +128,9 @@ fw_setenv ipaddr 192.168.xx.1
 to change the IP of the Pluto to one in the same subnet used by the Android
 Ethernet tethering.
 
+The [Maia SDR wiki](https://github.com/maia-sdr/maia-sdr/wiki/Android-support)
+contains more information about Android support in different devices.
+
 In some Android devices, the IP that is used for Ethernet tethering may be
 chosen randomly each time that the device is rebooted. An address from the
 subnet `192.168.xxx.0/24` is chosen, where `xxx` can change. To deal with this
