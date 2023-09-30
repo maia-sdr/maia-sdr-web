@@ -4,7 +4,7 @@
     "Daniel Estevez <daniel@destevez.net>"
   ],
   "description": "Maia SDR waterfall example",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
@@ -20,7 +20,9 @@
   "module": "waterfall_example.js",
   "homepage": "https://maia-sdr.org/",
   "types": "waterfall_example.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "./snippets/*"
+  ],
   "keywords": [
     "SDR",
     "FPGA",
