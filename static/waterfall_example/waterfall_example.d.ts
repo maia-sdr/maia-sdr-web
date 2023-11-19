@@ -1,6 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
+* @param {string} canvas
+*/
+export function make_waterfall(canvas: string): void;
+/**
 * Initialize the wasm module.
 *
 * This function is set to run as soon as the wasm module is instantiated. It
@@ -17,31 +21,27 @@ export function start(): void;
 * callbacks that keep the application running.
 */
 export function maia_wasm_start(): void;
-/**
-* @param {string} canvas
-*/
-export function make_waterfall(canvas: string): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly make_waterfall: (a: number, b: number, c: number) => void;
   readonly start: () => void;
   readonly maia_wasm_start: (a: number) => void;
-  readonly make_waterfall: (a: number, b: number, c: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__Fn_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h9fedf4ecdfaef9fb: (a: number, b: number) => number;
-  readonly _dyn_core__ops__function__Fn_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h84a73a6c05432c52: (a: number, b: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1__h691e8e97cf9508d4: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1_mut__h2114f6ea6548549c: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1_mut__h220f418a7eac6941: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke0_mut__h77d7e03a9c772f50: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke0_mut__h753980cbd1cbc076: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__Fn_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h976f10506cfdcd54: (a: number, b: number) => number;
+  readonly _dyn_core__ops__function__Fn_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h27ab54773cbdf6c0: (a: number, b: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke1__h17db849b883ffabd: (a: number, b: number, c: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke1_mut__h8e72ed99db1a0cc0: (a: number, b: number, c: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke1_mut__haa33983119709e8b: (a: number, b: number, c: number) => void;
+  readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h3c7d769e0d744879: (a: number, b: number, c: number, d: number) => void;
-  readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h1ea8417eb6b6165e: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
