@@ -4,22 +4,41 @@ description = "Installation instructions"
 weight = 1
 +++
 
-These instructions describe how to install and use Maia SDR on an
-[ADALM Pluto](https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html)
-that is running the default ADI firmware image. It is also possible to follow
-the same instructions with a Pluto that has the Maia SDR firmware image, in
-order to update it with a newer version of Maia SDR.
+These instructions describe how to install and use Maia SDR on an [ADALM
+Pluto](https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html)
+and other devices. The instructions can be followed to install Maia SDR on a
+device that is running its original firmware image, or to install Maia SDR on a
+device already running Maia SDR, in order to update it to a newer version of
+Maia SDR. The device can be reverted to its original firmware by flashing again
+the original firmware.
+
+# Supported devices
+
+* ADALM Pluto. This is the main platform for Maia SDR. The firmware is located
+  in the [plutosdr-fw](https://github.com/maia-sdr/plutosdr-fw) Maia SDR fork.
+
+* Pluto+. The firmware is also located in the
+  [plutosdr-fw](https://github.com/maia-sdr/plutosdr-fw) Maia SDR fork. Also see
+  [these notes regarding the
+  Pluto+](https://github.com/maia-sdr/plutosdr-fw?tab=readme-ov-file#pluto).
+
+* AntSDR E310 and E200. Support for these devices is somewhat experimental. The
+  firmware is located in the
+  [antsdr-fw-patch](https://github.com/maia-sdr/antsdr-fw-patch) Maia SDR
+  fork. This firmware might not be up to date with the latest version of Maia SDR.
 
 # Download the firmware image
 
-Go to the
-[latest Maia SDR Pluto firmware release](https://github.com/maia-sdr/plutosdr-fw/releases/latest)
-and download the file `plutosdr-fw-maia-sdr-v[version].zip`. This zip file contains the
-firmware images that are used below (such as `pluto.frm`).
+For the ADALM Pluto and Pluto+, go to the [latest Maia SDR Pluto firmware
+release](https://github.com/maia-sdr/plutosdr-fw/releases/latest).  For the
+ADALM Pluto, download the file `plutosdr-fw-maia-sdr-v[version].zip`. For the
+Pluto+ download the file `plutoplut-fw-maia-sdr-v[version].zip`. This zip file
+contains the firmware images that are used below (such as `pluto.frm`). For
+other devices see the repositories linked in the previous section.
 
 # Flash the firmware image
 
-The firmware image can be flashed in the same way as the default ADI
+For the ADALM Pluto, the firmware image can be flashed in the same way as the default ADI
 firmware. See the
 [upgrade instructions](https://wiki.analog.com/university/tools/pluto/users/firmware#upgrading)
 in the
@@ -27,6 +46,12 @@ in the
 The Maia SDR firmware images include the mass storage device, in the same way as
 the default ADI images, so it is possible (and recommended) to use the Mass
 Storage Update method with the file `pluto.frm`.
+
+For the Pluto+, the firmware image can be flashed in the same way as for the
+ADALM Pluto. Other devices might have a different preferred way of installing
+firmware, particularly if the firmware is installed to an SD card instead of the
+QSPI flash. See the instructions of the original firmware of these devices for
+how to update the firmware.
 
 # Set up the u-boot environment
 
@@ -66,6 +91,18 @@ variables to include the `uio_pdrv_genirq.of_id=uio_pdrv_genirq` kernel command
 line parameter. When copying and pasting, take note that the commands are quite
 long. It is necessary to enter the commands one at a time in the Pluto shell
 because there is a character count limit.
+
+**Note for other devices:** The commands below are specific to the ADALM Pluto
+and Pluto+. Other devices might use a difference u-boot boot sequence. The
+recommended way to apply this change in other devices is to use `fw_printenv` to
+print all the u-boot environment variables, identify those that are boot
+sequences (they are usually called `ramboot`, `qspiboot`, `sdboot`, etc.), and
+use `fw_setenv` to modify these variables by adding
+`uio_pdrv_genirq.of_id=uio_pdrv_genirq` to the kernel command line
+parameters. If the Maia SDR firmware is installed to an SD card then this
+section and other sections below that deal with `fw_setenv` can be ignored,
+because the Maia SDR SD card image already contains these environment variables
+set as required.
 
 ```
 fw_setenv ramboot_verbose 'adi_hwref;echo Copying Linux from DFU to RAM... && run dfu_ram;if run adi_loadvals; then echo Loaded AD936x refclk frequency and model into devicetree; fi; envversion;setenv bootargs console=ttyPS0,115200 maxcpus=${maxcpus} rootfstype=ramfs root=/dev/ram0 rw earlyprintk clk_ignore_unused uio_pdrv_genirq.of_id=uio_pdrv_genirq uboot="${uboot-version}" && bootm ${fit_load_address}#${fit_config}'
