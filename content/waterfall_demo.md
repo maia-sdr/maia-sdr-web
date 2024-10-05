@@ -37,31 +37,6 @@ main .toc {
     --stopping-color: #dd9;
 }
 
-@media (prefers-color-scheme: dark) {
-    /* Dark mode */
-    :root {
-        --background-color: black;
-        --text-color: white;
-        --line-color: white;
-
-        --focus-outline-color: rgba(208, 208, 255, 0.5);
-
-        --input-bg-color: #222;
-        --input-highlight-color: #227;
-        --input-bg-invalid-color: #ffb0b0;
-
-        --button-color: #444;
-        --button-highlight-color: #777;
-
-        /* Record button */
-        --record-color: #7b7;
-        --record-highlight-color: #9d9;
-        --stop-color: #b77;
-        --stop-highlight-color: #d99;
-        --stopping-color: #bb7;
-    }
-}
-
 #waterfall {
     touch-action: none;
     width: 100%;
