@@ -1,5 +1,6 @@
 {
   "name": "waterfall-example",
+  "type": "module",
   "collaborators": [
     "Daniel Estevez <daniel@destevez.net>"
   ],
@@ -17,7 +18,7 @@
     "LICENSE-APACHE",
     "LICENSE-MIT"
   ],
-  "module": "waterfall_example.js",
+  "main": "waterfall_example.js",
   "homepage": "https://maia-sdr.org/",
   "types": "waterfall_example.d.ts",
   "sideEffects": [
