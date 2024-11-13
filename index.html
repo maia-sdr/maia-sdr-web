@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maia SDR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+
+    <header class="pos-absolute" style="background-color: transparent">
+        
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+    </header>
+
+    <div class="hero">
+        
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <div class="text-center hero-div">
+            <div class="heading-text" style="font-size: 50px">
+                Maia SDR
+            </div>
+            <div class="title-text">
+	      An open-source FPGA-based SDR project focusing on the ADALM Pluto
+            </div>
+            <div>
+                <a class="github-button" href="https://github.com/maia-sdr/maia-sdr" data-size="large" data-show-count="true"
+                    aria-label="Star maia-sdr on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/maia-sdr/maia-sdr" data-size="large"
+                    data-show-count="true" aria-label="Fork maia-sdr on GitHub">Fork</a>
+            </div>
+        </div>
+        <div class="hero-image">
+        <img style="width: 100%;"
+             alt="A screenshot of Maia SDR, showing a waterfall in the web browser"
+          src="https://maia-sdr.org/maia-sdr-screenshot.jpg">
+        </div>
+        <div class="explore-more text"
+            onclick="document.getElementById('demo').scrollIntoView({behavior: 'smooth'})">
+            More ⇩
+        </div>
+
+    </div>
+
+    
+
+    <main>
+        
+        
+        
+        
+        <div class="toc">
+	    
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/#demo">Demo</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/#overview">Overview</a>
+                </div>
+                
+                
+            </div>
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+            <h1 id="demo">Demo</h1>
+<iframe width="560" height="315"
+        style="width: min(max(75%, 600px), 100%); height: auto; aspect-ratio: 16/9;"
+        src="https://www.youtube.com/embed/pEthYJoAqII"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+<h1 id="overview">Overview</h1>
+<p>Maia SDR currently provides a firmware image for the <a href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html">ADALM
+Pluto</a>
+with the following functionality:</p>
+<ul>
+<li>Web-based interface that can be accessed from a smartphone, PC or other device.</li>
+<li>Real-time waterfall display supporting up to 61.44 Msps (limit given by the
+AD936x RFIC of the Pluto).</li>
+<li>IQ recording in <a href="https://github.com/gnuradio/SigMF">SigMF format</a>, at up to
+61.44 Msps and with a 400 MiB maximum data size (limit given by the Pluto RAM
+size). Recordings can be downloaded to a smartphone or other device.</li>
+</ul>
+<p>Though this is still limited functionality (more will come in the future), it
+already provides a "minimum viable product" that demonstrates some features that
+cannot be easily accomplished with other portable and affordable solutions.</p>
+<p>Here is a deployment diagram of Maia SDR used with a portable device running a
+web browser.</p>
+<p><img style="width: min(max(50%, 600px), 100%);" alt="Maia SDR deployment diagram"
+     src="maia-sdr-deployment.svg"></p>
+<p>The FPGA design (maia-hdl) is written in
+<a href="https://github.com/amaranth-lang/amaranth">Amaranth</a> and includes:</p>
+<ul>
+<li>Pipelined FFT core focusing on low resource usage and flexible configuration.</li>
+<li>DMAs focusing on low resource usage and high throughput.</li>
+</ul>
+<p>A software application (maia-httpd) written in asynchronous Rust runs on the
+Zynq ARM CPU. It provides:</p>
+<ul>
+<li>An HTTP server that serves the UI as a web application.</li>
+<li>Control of the FPGA IP cores and AD936x through a RESTful API.</li>
+<li>Streaming of waterfall (spectrogram) data using WebSockets.</li>
+</ul>
+<p>The UI is a web application (maia-wasm) written in Rust with WebAssembly. It
+uses WebGL2 to render the waterfall (see the <a href="https://maia-sdr.org/waterfall-demo">waterfall demo</a>).</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>
