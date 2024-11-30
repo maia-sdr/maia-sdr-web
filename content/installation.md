@@ -192,11 +192,12 @@ A reboot is necessary to apply these changes.
 
 # Open Maia SDR in the web browser and install it as a web app
 
-Maia SDR listens on TCP port 8000 using HTTP. Once the Pluto has booted up and a
-USB Ethernet or other network connection to the Pluto has been established, we
-can open [`http://192.168.2.1:8000`](http://192.168.2.1:8000) in a web browser
-(replace the IP address by the appropriate address of the Pluto if you have
-modified it).
+Maia SDR listens on TCP port 8000 using HTTP and on TCP port 443 using HTTPS
+(this is the standard HTTPS port). Once the Pluto has booted up and a USB
+Ethernet or other network connection to the Pluto has been established, we can
+open [`http://192.168.2.1:8000`](http://192.168.2.1:8000) or
+[`https://192.168.2.1`](https://192.168.2.1) in a web browser (replace the IP
+address by the appropriate address of the Pluto if you have modified it).
 
 In mobile operating systems such as Android and iOS, web applications (also
 called progressive web apps, or PWAs) can be installed as an icon to the home
@@ -206,10 +207,50 @@ state) when accessed through the home screen icon.
 [MDN](https://developer.mozilla.org/en-US/) has some instructions about how to
 [install a web
 app](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installing)
-in several web browsers.
+in several web browsers. Installing Maia SDR as a PWA must be done by accessing
+Maia SDR over HTTPS (HTTP will not work), and the SSL CA certificate must be
+installed as described in the next section.
 
 It is not necessary to install Maia SDR as a web app again if the Maia SDR
 firmware image is updated.
+
+# Install the SSL CA certificate (optional)
+
+The Maia SDR HTTPS server uses an SSL certificate that is generated when the
+Pluto first boots and stored in a persistent JFFS2 partition in the Pluto
+flash. This SSL certificate is signed by a CA certificate that is generated in
+the same way. Using HTTPS instead of HTTP to access Maia SDR is needed to use
+the following features:
+
+- Install Maia SDR as a [Progressive Web
+  App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+  (PWA). A PWA can be installed to an Android or iOS device (and in some cases
+  also to a desktop computer). It enables the Maia SDR web UI to run without
+  displaying the web browser bar and other UI elements, which occupy valuable
+  screen space. See the [Maia SDR demo
+  video](https://www.youtube.com/watch?v=pEthYJoAqII) for how this looks
+  like. Unfortunately, current web browsers require PWAs to be accessed by HTTPS
+  with a certificate signed by a valid CA to be installable. Certificates that
+  are accepted manually by the user at the security warning are not allowed,
+  except for an app running on `localhost`, which is an exception for local
+  development. This was not the case when Maia SDR was first released in
+  2023. It could be installed as a PWA through HTTP on Android Chrome.
+
+- [HTML 5 Geolocation
+  API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API). This
+  is used by the Maia SDR web UI to obtain the current location of the device
+  (using GPS and other sensors), which is optionally added to the metadata in
+  SigMF recordings. Using the Geolocation API requires accessing the web app
+  through HTTPS, although any kind of certificate is allowed (as long as the
+  user accepts the security warning if the certificate is not signed by a valid
+  CA).
+
+To install Maia SDR as a PWA and to avoid security warnings when accessing Maia
+SDR by HTTPS, the Maia SDR CA certificate needs to be installed to the user
+device. There is a security risk associated with installing a CA certificate, so
+this step is optional. The section about [SSL
+certificates](@/installation/ssl-certificates.md) gives more information about
+how this is done and the associated security considerations.
 
 # Differences between the Maia SDR firmware and the default ADI firmware
 
