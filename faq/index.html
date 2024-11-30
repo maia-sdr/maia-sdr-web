@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FAQ | Maia SDR </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        
+        
+        <div class="toc">
+	    
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/faq/#why-the-name-maia-sdr">Why the name &quot;Maia SDR&quot;?</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/faq/#misnomer">Isn&#x27;t &quot;FPGA-based SDR&quot; a misnomer?</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/faq/#how-is-maia-sdr-pronounced">How is &quot;Maia SDR&quot; pronounced?</a>
+                </div>
+                
+                
+            </div>
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+<div class="heading-text">FAQ</div>
+<h1 id="why-the-name-maia-sdr">Why the name "Maia SDR"?</h1>
+<p><a href="https://en.wikipedia.org/wiki/Maia_(star)">Maia</a> is a star in the
+<a href="https://en.wikipedia.org/wiki/Pleiades">Pleiades</a> cluster. I chose the name
+because I like how it sounds, and because it is related to astronomy. The name
+vaguely hints at radio astronomy, which is a topic dear to me. Even though Maia
+SDR has not been developed with radio astronomy in mind as a potential use case,
+it could potentially be of interest to the radio astronomy FPGA community.</p>
+<h1 id="misnomer">Isn't "FPGA-based SDR" a misnomer?</h1>
+<p>Sure. If most of the digital signal processing is done in FPGA, it is not done
+in software. I know and partly share comments in the SDR community about how the
+term "SDR" is often used inappropriately and has become somewhat of a
+buzzword. In this sense, calling Maia SDR an "SDR" is not very
+appropriate. However, I cannot think of a better term. I do not know of a word
+other than SDR that evokes the same ideas in terms of functionality, hardware
+devices, community, etc.</p>
+<p>Also, in a certain sense I think that "SDR" is not a very bad name for Maia
+SDR. As a project, it strives to explore in the future concepts such as
+relatively fast-synthesis using open source FPGA toolchains, on demand
+reconfiguration, and other concepts related to flexibility in terms of
+functionality. In this sense, Maia SDR has more in common with a software radio
+application than with a silicon radio. Ultimately, the flexibility might matter
+more than whether the DSP computations are done in LUTs or in an ALU.</p>
+<h1 id="how-is-maia-sdr-pronounced">How is "Maia SDR" pronounced?</h1>
+<p>Maia is pronounced in English as /ˈmeɪə/, but I often use the Spanish
+pronunciation /'maja/ (English <em>my-ah</em>). This is closer to the original Greek and Latin
+pronunciations. You can use whichever you prefer.</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>

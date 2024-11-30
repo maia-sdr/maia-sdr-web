@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About | Maia SDR </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        <div class="toc">
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+<div class="heading-text">About Maia SDR</div>
+<p>Maia SDR is an open-source project started by <a href="https://destevez.net">Daniel
+Estévez</a> in 2022 with the goal of developing radio
+applications whose signal processing runs mainly on an FPGA. In this sense, Maia
+SDR is an FPGA-based SDR (see the <a href="https://maia-sdr.org/faq/#misnomer">FAQ</a> if you find this term
+strange).</p>
+<p>There are several motivations that led to this project:</p>
+<ol>
+<li>There is a thriving open-source SDR community, which develops great pieces of
+software. However, not many people are doing FPGA development (though there are
+some notable exceptions).</li>
+<li>There is an open-source FPGA community doing amazing work and projects. Most
+of these projects are not related to radio or signal processing, and the
+interaction between the FGPA and SDR communities is minimal (with a few
+exceptions).</li>
+<li>Affordable handheld and portable radios are not very flexible and do not
+offer much variety in terms of how to explore the RF spectrum and have fun with
+it. A PC running SDR software is vastly superior in capabilities to a compact
+solution.</li>
+<li>Portable solutions should use FPGA processing as much as possible in order to
+save power and offer capabilities which are not possible with embedded CPUs.</li>
+</ol>
+<p>With these ideas in mind, Maia SDR starts as a project with the long term goal
+of building an open-source compact/portable radio that offers high flexibility
+in the same sense that SDR software does, and that uses an FPGA for most of its
+signal processing. The work-in-progress project will hopefully serve as a
+stepping stone that people can extend or use as a base for their projects, and
+will bring more FPGA development to the SDR community and more collaboration
+between the FPGA and SDR communities.</p>
+<p>The ideal hardware for this project would be an affordable board (or stack of
+boards) with a relatively capable FPGA that supports an open-source toolchain,
+an RFIC of some sort, some kind of RISC-V SoC or microcontroller, and UI
+hardware (touchscreen, etc.). Unfortunately, something like this does not
+currently exist. This is a chicken and egg problem, in the sense that there are
+not enough open-source FPGA designs yet to make this hardware interesting, so
+the hardware does not get developed, and so there is no hardware to develop the
+FPGA designs for. If I started by developing the hardware, I would probably
+never finish. Instead of dreaming about this hardware, a good way to kickstart
+these activities is to focus on an existing, affordable, and widely available
+hardware that can serve as a "good enough replacement".</p>
+<p>I have decided to focus on the <a href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html">ADALM
+Pluto</a>
+because it is a very popular and common SDR, and it has a fairly capable Zynq
+FPGA + ARM SoC. Together with a smartphone for the UI, this pair of devices give
+a portable solution for which already many hobbyists have the required
+hardware. This platform serves to develop a "product" that can have useful
+features right from the start, rather than having something in a
+work-in-progress state that people cannot use until (and if) it is finished.</p>
+<p>Maia SDR attempts to bring more interest in FPGA delopment for radio
+applications, and to serve as a starting point for other projects, by dealing
+with things which are usually entry barriers (such as how to move data around
+with DMAs or how to compute an FFT). It also serves as a playground to explore
+novel technologies and ideas.</p>
+<p>The HDL code of Maia SDR is written in
+<a href="https://github.com/amaranth-lang/amaranth">Amaranth</a>, which is a Python-based
+HDL and toolchain. This is one of the flagship projects of the open-source FPGA
+community, and there have already been some small projects using Amaranth for
+radio applications (see an <a href="https://www.youtube.com/watch?v=A5LOyRVED3c">SDR transmitter tutorial at EU GNU Radio
+days</a> and a <a href="https://blog.kiranshila.com/blog/casper_amaranth.md">post about how to use
+Amaranth for radio
+astronomy</a>).</p>
+<p>The software of Maia SDR runs on the Zynq ARM CPU and serves to control the FPGA
+and to provide an interface to a smartphone (or other device) connected to the
+Pluto. It does so by spawning an HTTP server that has a web application as UI, a
+RESTful API for control, and uses WebSockets to stream data. The software is
+written in <a href="https://www.rust-lang.org/">Rust</a> using asynchronous programming. I
+think that Rust is a very good language for systems development, and has a
+wonderful open-source community behind. Perhaps this choice of technology will
+give at some point a link between Maia SDR and
+<a href="https://www.futuresdr.org/">FutureSDR</a>, which is a very interesting SDR runtime
+project that is also implemented in asynchronous Rust.</p>
+<p>The UI of Maia SDR is a web application that uses WebGL2 to render the waterfall
+display. It is implemented in Rust using WebAssembly.</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SSL certificates | Maia SDR </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        
+        
+        <div class="toc">
+	    
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/ssl-certificates/#introduction">Introduction</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/ssl-certificates/#installation-of-ca-certificate-on-android">Installation of CA certificate on Android</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/ssl-certificates/#ssl-certificate-generation-process">SSL certificate generation process</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/ssl-certificates/#security-considerations">Security considerations</a>
+                </div>
+                
+                
+            </div>
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+<div class="heading-text">Maia SDR SSL certificates</div>
+<p><strong>WARNING:</strong> Before proceeding, please understand the security implications of
+installing a CA certificate in your device. See the security considerations
+below for more details.</p>
+<h1 id="introduction">Introduction</h1>
+<p>The Maia SDR HTTPS server uses an SSL certificate that is generated when the
+Pluto first boots and stored in a persistent JFFS2 partition in the Pluto
+flash. This SSL certificate is signed by a CA certificate that is generated in
+the same way. The CA certificate needs to be installed to the user device in
+order to install Maia SDR as a Progressive Web App or to avoid the security
+warnings caused by accessing an HTTPS server with an untrusted certificate
+(HTTPS needs to be used to use the HTML 5 Geolocation API).</p>
+<p>This page describes how to install the CA certificate, how the SSL certificate
+generation process works, and the security considerations associated to
+installing this CA certificate on a device.</p>
+<h1 id="installation-of-ca-certificate-on-android">Installation of CA certificate on Android</h1>
+<p>First download the CA certificate to your device. This can either be done by
+accessing the Maia SDR web UI by HTTP or HTTPS, opening the Settings dialog,
+clicking on the Other tab, and clicking on the "CA certificate" link, or by
+going directly to <a href="https://192.168.2.1/ca.crt"><code>https://192.168.2.1/ca.crt</code></a>
+(using here the IP address assigned to the Pluto).</p>
+<p>Then go to the Android Settings and navigate to "Passwords &amp; security &gt; Privacy &gt;
+More security settings &gt; Encryption and credentials &gt; Install a certificate &gt;
+CA certificate". Select "Install anyway" in the security warning, confirm your
+PIN, and choose the downloaded <code>ca.crt</code> file. When installing the CA
+certificate, its CN (common name) will be displayed. This contains the serial
+number of the Pluto, which can be checked against the sticker on the back of the
+Pluto for increased security (see below for details).</p>
+<p>The CA certificate can be uninstalled at any time by navigating to "Passwords &amp;
+security &gt; Privacy &gt; More security settings &gt; Encryption and credentials &gt;
+Trusted credentials", selecting the "User" tab, clicking on the Maia SDR
+certificate, and choosing "Uninstall".</p>
+<h1 id="ssl-certificate-generation-process">SSL certificate generation process</h1>
+<p>The certificate generation is handled by the script
+<a href="https://github.com/maia-sdr/buildroot/blob/maia-sdr/board/pluto/S50maia-sdr-certificates"><code>/etc/rc.d/S50maia-sdr-certificates</code></a>,
+which runs when the Pluto boots. This script does the following:</p>
+<ol>
+<li>
+<p>It checks if the <a href="https://wiki.analog.com/university/tools/pluto/users/customizing#enabling_persistent_ssh_keys">Pluto JFFS2 persistent
+partition</a>
+has been successfully mounted in <code>/mnt/jffs2</code>. If not, the flash partition is
+erased, formatted in JFFS2 and mounted in <code>/mnt/jffs2</code>.</p>
+</li>
+<li>
+<p>It checks if <code>/mnt/jffs2/maia-sdr-ca.crt</code> exists. It if exists, it assumes
+that all the certificates and keys exist and the script exits. If it does not
+exist, the script continues.</p>
+</li>
+<li>
+<p>It generates a CA root certificate and private key (self-signed). The private
+key is only saved to RAM in <code>/tmp/maia-sdr-ca.key</code>. The certificate is saved
+to persistent flash in <code>/mnt/jffs2/maia-sdr-ca.crt</code>. The key is 2048-bit
+RSA. The certificate has a validity of 36500 days. Its start time is near
+1970-01-01 because the Pluto does not have a real-time clock. The CN of the
+CA certificate contains the Pluto serial number, which can be found on a
+sticker on the back of the Pluto (this serial number is actually the unique
+ID of the NOR flash).</p>
+</li>
+<li>
+<p>It generates a private key for the HTTPS server (<code>maia-httpd</code>) and
+certificate signing request. The private key is saved to persistent flash in
+<code>/mnt/jffs2/maia-httpd.key</code>. The certificate signing request is only saved to
+RAM in <code>/tmp/maia-httpd.csr</code>. The key is 2048-bit RSA. The CN is "maia-httpd
+plutosdr-fw serial ${serial}", where <code>${serial}</code> is the serial number of the
+Pluto.</p>
+</li>
+<li>
+<p>The certificate signing request is signed with the private CA key. Subject
+Alternative Names (SANs) for all the IP addresses of the form <code>192.168.*.1</code>
+are added to the certificate. The certificate has a validity of 36500 days
+and a start time near 1970-01-01. The certificate is saved to persistent
+flash in <code>/mnt/jffs2/maia-httpd.crt</code>. The CA serial is only saved to RAM in
+<code>/tmp/maia-sdr-ca.srl</code>.</p>
+</li>
+<li>
+<p>The CA private key, the certificate signing request and the CA serial are
+deleted from RAM.</p>
+</li>
+</ol>
+<p>Note that the CA private key is immediately destroyed after it has been used to
+sign the HTTPS server certificate. Therefore, the HTTPS server certificate is
+the only certificate that can possibly exist that has been signed by this CA.</p>
+<p>When the Pluto finishes booting, <code>maia-httpd</code> uses the SSL certificate and key
+stored in <code>/mnt/jffs2/maia-httpd.crt</code> and <code>/mnt/jffs2/maia-httpd.key</code> for the
+HTTPS server. It serves the file <code>/mnt/jffs2/maia-httpd-ca.crt</code> over HTTP and
+HTTPS at the URL <code>/ca.crt</code>. This is true regardless of whether these
+certificates have been generated automatically by the process described above or
+whether the user has replaced them by other certificates at some point.</p>
+<h1 id="security-considerations">Security considerations</h1>
+<p>Installing a CA certificate on a device always represents a security risk, since
+any certificate signed by that CA and such that its CN or SANs match the ones
+expected will be considered valid by the device. An attacker that obtains keys
+signed by this CA could use them to perform man-in-the-middle attacks or to serve malicious sites.</p>
+<p>In the case of the Maia SDR SSL certificates, the Maia SDR Pluto firmware can be
+audited to check that it indeed performs the process described above. Even if
+the user suspects that the Maia SDR Pluto firmware might have been compromised,
+the fact that the certificates include the Pluto serial number in their CN is an
+added security measure, because this means that an attacker could not have
+supplied malicious certificates created beforehand. The certificates must have
+been created with knowledge of the Pluto serial number. Moreover, it is
+difficult for a malicious firmware to exfiltrate the CA private key, since it is
+supposed to be generated without a network connection (perhaps only a direct
+connection to the device connected by USB to the Pluto) and not stored in
+persistent storage. The only persistent storage that can be written by software
+in the Pluto is the JFFS2 partition and the u-boot environment partition. The
+user could check that a malicious firmware has not saved the CA private key
+there. In summary, it is reasonable to trust that the Maia SDR Pluto firmware
+generates a CA on boot, uses it to sign the HTTPS certificate, and discards the
+private CA key, so that no other certificates can possibly be signed by that CA.</p>
+<p>By default, the Pluto allows root ssh access with a well-known password. The
+root password <a href="https://wiki.analog.com/university/tools/pluto/users/customizing#changing_the_root_password_on_the_target">can be
+changed</a>. If
+this is not done, the user should assume that an attacker that has network
+access to the Pluto can retrieve the HTTPS server private key and
+certificate. Often the Pluto is only exposed to a local network, so the attack
+surface is low. The HTTPS certificate only has SANs for IP addresses of the form
+<code>192.168.*.1</code>. This means that if an attacker has this certificate and private
+key, it is only possible for the attacker to set up a man-in-the-middle or fake
+server using one of these IP addresses. Note that the user needs to access the
+malicious site using <code>https://192.168.*.1/</code> rather than a DNS name, or the SAN
+will not match. Therefore, the possibilities for a feasible attack are rather
+limited. Nevertheless, if this possibility is a concern, the HTTPS private key
+can be kept safe from attackers, by not allowing them to access the Pluto over
+the network and/or by changing the Pluto root password.</p>
+<p>A user who does not trust the SSL certificate generation process and wants to
+supply their own certificates can do so simply by overwriting the corresponding
+files in <code>/mnt/jffs2</code>, for instance by copying them with scp. The same security
+considerations for the HTTPS private key also apply in this case.</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>

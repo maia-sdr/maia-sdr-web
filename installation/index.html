@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Installation | Maia SDR </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        
+        
+        <div class="toc">
+	    
+            <div class="toc-sticky">
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#supported-devices">Supported devices</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#download-the-firmware-image">Download the firmware image</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#flash-the-firmware-image">Flash the firmware image</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#set-up-the-u-boot-environment">Set up the u-boot environment</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#set-up-1r1t-ad9364-mode">Set up 1R1T AD9364 mode</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#configure-the-pluto-usb-ethernet">Configure the Pluto USB Ethernet</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#open-maia-sdr-in-the-web-browser-and-install-it-as-a-web-app">Open Maia SDR in the web browser and install it as a web app</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#install-the-ssl-ca-certificate-optional">Install the SSL CA certificate (optional)</a>
+                </div>
+                
+                
+                <div class="toc-item">
+                    <a class="subtext" href="https://maia-sdr.org/installation/#differences-between-the-maia-sdr-firmware-and-the-default-adi-firmware">Differences between the Maia SDR firmware and the default ADI firmware</a>
+                </div>
+                
+                
+            </div>
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+<div class="heading-text">Installation instructions</div>
+<p>These instructions describe how to install and use Maia SDR on an <a href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/adalm-pluto.html">ADALM
+Pluto</a>
+and other devices. The instructions can be followed to install Maia SDR on a
+device that is running its original firmware image, or to install Maia SDR on a
+device already running Maia SDR, in order to update it to a newer version of
+Maia SDR. The device can be reverted to its original firmware by flashing again
+the original firmware.</p>
+<h1 id="supported-devices">Supported devices</h1>
+<ul>
+<li>
+<p>ADALM Pluto. This is the main platform for Maia SDR. The firmware is located
+in the <a href="https://github.com/maia-sdr/plutosdr-fw">plutosdr-fw</a> Maia SDR fork.</p>
+</li>
+<li>
+<p>Pluto+. The firmware is also located in the
+<a href="https://github.com/maia-sdr/plutosdr-fw">plutosdr-fw</a> Maia SDR fork. Also see
+<a href="https://github.com/maia-sdr/plutosdr-fw?tab=readme-ov-file#pluto">these notes regarding the
+Pluto+</a>.</p>
+</li>
+<li>
+<p>AntSDR E310 and E200. Support for these devices is somewhat experimental. The
+firmware is located in the
+<a href="https://github.com/maia-sdr/antsdr-fw-patch">antsdr-fw-patch</a> Maia SDR
+fork. This firmware might not be up to date with the latest version of Maia SDR.</p>
+</li>
+</ul>
+<h1 id="download-the-firmware-image">Download the firmware image</h1>
+<p>For the ADALM Pluto and Pluto+, go to the <a href="https://github.com/maia-sdr/plutosdr-fw/releases/latest">latest Maia SDR Pluto firmware
+release</a>.  For the
+ADALM Pluto, download the file <code>plutosdr-fw-maia-sdr-v[version].zip</code>. For the
+Pluto+ download the file <code>plutoplut-fw-maia-sdr-v[version].zip</code>. This zip file
+contains the firmware images that are used below (such as <code>pluto.frm</code>). For
+other devices see the repositories linked in the previous section.</p>
+<h1 id="flash-the-firmware-image">Flash the firmware image</h1>
+<p>For the ADALM Pluto, the firmware image can be flashed in the same way as the default ADI
+firmware. See the
+<a href="https://wiki.analog.com/university/tools/pluto/users/firmware#upgrading">upgrade instructions</a>
+in the
+<a href="https://wiki.analog.com/university/tools/pluto/users/firmware">ADI Pluto firmware wiki</a>.
+The Maia SDR firmware images include the mass storage device, in the same way as
+the default ADI images, so it is possible (and recommended) to use the Mass
+Storage Update method with the file <code>pluto.frm</code>.</p>
+<p>For the Pluto+, the firmware image can be flashed in the same way as for the
+ADALM Pluto. Other devices might have a different preferred way of installing
+firmware, particularly if the firmware is installed to an SD card instead of the
+QSPI flash. See the instructions of the original firmware of these devices for
+how to update the firmware.</p>
+<h1 id="set-up-the-u-boot-environment">Set up the u-boot environment</h1>
+<p>Maia SDR requires an additional Linux kernel command line parameter in
+comparison to the default ADI firmware, because it uses the
+<a href="https://www.kernel.org/doc/html/v5.0/driver-api/uio-howto.html#using-uio-pdrv-genirq-for-platform-devices">uio_pdrv_genirq</a>
+kernel module. This kernel command line parameter is configured through the
+<a href="https://wiki.analog.com/university/tools/pluto/devs/booting">u-boot environment</a>.</p>
+<p>The u-boot version included in the Maia SDR <code>boot.frm</code> and <code>boot.dfu</code> already
+includes the modified environment variables as defaults. However, flashing
+<code>boot.frm</code> or <code>boot.dfu</code> is not recommended for inexperienced users, because an
+error during the bootloader flashing could brick the device (JTAG access will be
+needed to recover it).</p>
+<p>A safer way to modify these environment variables is to use <code>fw_setenv</code>. Doing
+this does not interfere with the default ADI firmware image and can be done at any time,
+before or after flashing a Maia SDR firmware image. Moreover, the environment
+variables are not modified when <code>pluto.frm</code> is flashed, so it is only necessary
+to follow these steps once. Afterwards, newer versions of the Maia SDR
+<code>pluto.frm</code> image can be flashed without the need to use <code>fw_setenv</code>.</p>
+<p>All the following commands should be run in the Pluto via ssh or serial.</p>
+<p>To check if the u-boot environment variables have been modified already to allow
+Maia SDR to be used, we can run</p>
+<pre><code>fw_printenv | grep uio_pdrv_genirq
+</code></pre>
+<p>This will print a few lines of text if the variables have been modified (in
+which case it is not necessary to do anything else), and
+nothing if not (in which case it is necessary to follow the next steps in this
+section).</p>
+<p>The following three commands are used to modify the required u-boot environment
+variables to include the <code>uio_pdrv_genirq.of_id=uio_pdrv_genirq</code> kernel command
+line parameter. When copying and pasting, take note that the commands are quite
+long. It is necessary to enter the commands one at a time in the Pluto shell
+because there is a character count limit.</p>
+<p><strong>Note for other devices:</strong> The commands below are specific to the ADALM Pluto
+and Pluto+. Other devices might use a difference u-boot boot sequence. The
+recommended way to apply this change in other devices is to use <code>fw_printenv</code> to
+print all the u-boot environment variables, identify those that are boot
+sequences (they are usually called <code>ramboot</code>, <code>qspiboot</code>, <code>sdboot</code>, etc.), and
+use <code>fw_setenv</code> to modify these variables by adding
+<code>uio_pdrv_genirq.of_id=uio_pdrv_genirq</code> to the kernel command line
+parameters. If the Maia SDR firmware is installed to an SD card then this
+section and other sections below that deal with <code>fw_setenv</code> can be ignored,
+because the Maia SDR SD card image already contains these environment variables
+set as required.</p>
+<pre><code>fw_setenv ramboot_verbose &#x27;adi_hwref;echo Copying Linux from DFU to RAM... &amp;&amp; run dfu_ram;if run adi_loadvals; then echo Loaded AD936x refclk frequency and model into devicetree; fi; envversion;setenv bootargs console=ttyPS0,115200 maxcpus=${maxcpus} rootfstype=ramfs root=&#x2F;dev&#x2F;ram0 rw earlyprintk clk_ignore_unused uio_pdrv_genirq.of_id=uio_pdrv_genirq uboot=&quot;${uboot-version}&quot; &amp;&amp; bootm ${fit_load_address}#${fit_config}&#x27;
+
+fw_setenv qspiboot_verbose &#x27;adi_hwref;echo Copying Linux from QSPI flash to RAM... &amp;&amp; run read_sf &amp;&amp; if run adi_loadvals; then echo Loaded AD936x refclk frequency and model into devicetree; fi; envversion;setenv bootargs console=ttyPS0,115200 maxcpus=${maxcpus} rootfstype=ramfs root=&#x2F;dev&#x2F;ram0 rw earlyprintk clk_ignore_unused uio_pdrv_genirq.of_id=uio_pdrv_genirq uboot=&quot;${uboot-version}&quot; &amp;&amp; bootm ${fit_load_address}#${fit_config} || echo BOOT failed entering DFU mode ... &amp;&amp; run dfu_sf&#x27;
+
+fw_setenv qspiboot &#x27;set stdout nulldev;adi_hwref;test -n $PlutoRevA || gpio input 14 &amp;&amp; set stdout serial@e0001000 &amp;&amp; sf probe &amp;&amp; sf protect lock 0 100000 &amp;&amp; run dfu_sf;  set stdout serial@e0001000;itest *f8000258 == 480003 &amp;&amp; run clear_reset_cause &amp;&amp; run dfu_sf; itest *f8000258 == 480007 &amp;&amp; run clear_reset_cause &amp;&amp; run ramboot_verbose; itest *f8000258 == 480006 &amp;&amp; run clear_reset_cause &amp;&amp; run qspiboot_verbose; itest *f8000258 == 480002 &amp;&amp; run clear_reset_cause &amp;&amp; exit; echo Booting silently &amp;&amp; set stdout nulldev; run read_sf &amp;&amp; run adi_loadvals; envversion;setenv bootargs console=ttyPS0,115200 maxcpus=${maxcpus} rootfstype=ramfs root=&#x2F;dev&#x2F;ram0 rw quiet loglevel=4 clk_ignore_unused uio_pdrv_genirq.of_id=uio_pdrv_genirq uboot=&quot;${uboot-version}&quot; &amp;&amp; bootm ${fit_load_address}#${fit_config} || set stdout serial@e0001000;echo BOOT failed entering DFU mode ... &amp;&amp; sf protect lock 0 100000 &amp;&amp; run dfu_sf&#x27;
+</code></pre>
+<p>After these commands have been entered, it is possible to use <code>fw_printenv</code> as
+indicated above to check that the changes have been applied correctly. It is
+necessary to reboot the Pluto (for instance by using the <code>reboot</code> command) in
+order for the changes to be effective.</p>
+<h1 id="set-up-1r1t-ad9364-mode">Set up 1R1T AD9364 mode</h1>
+<p>Maia SDR assumes that the Pluto is configured for 1R1T (one receive channel, one
+transmit channel) mode and that an AD9364 device (frequency range 70 MHz - 6
+GHz, 61.44 Msps maximum sampling rate) is used. These options are stored in the
+u-boot environment and can be modified using <code>fw_setenv</code> as indicated in the
+<a href="https://wiki.analog.com/university/tools/pluto/users/customizing#updating_to_the_ad9364">updating to the AD9364</a>
+instructions in the
+<a href="https://wiki.analog.com/university/tools/pluto/users/customizing">customizing the Pluto ADI wiki</a>.</p>
+<p>Check that <code>fw_printenv</code> returns the appropriate values:</p>
+<pre><code># fw_printenv attr_name attr_val mode
+attr_name=compatible
+attr_val=ad9364
+mode=1r1t
+</code></pre>
+<p>Update the configuration if necessary:</p>
+<pre><code>fw_setenv attr_name compatible
+fw_setenv attr_val ad9364
+fw_setenv mode 1r1t
+</code></pre>
+<p>It is necessary to reboot the Pluto for these changes to be effective. As
+indicated in the previous section, the u-boot environment variables are
+preserved even when a new <code>pluto.frm</code> firmware image is flashed, so these
+changes need to be applied only once.</p>
+<h1 id="configure-the-pluto-usb-ethernet">Configure the Pluto USB Ethernet</h1>
+<p>As in the default ADI firmware image, the Ethernet compatibility mode needs to
+be configured depending on the operating system that will use the Pluto USB
+Ethernet. In general, CDC-ECM should be used for Android, CDC-NCM for iOS and
+macOS, and RNDIS for Windows. See the
+<a href="https://wiki.analog.com/university/tools/pluto/users/customizing#changing_the_usb_ethernet_compatibility_mode">ADI wiki instructions to change the USB Ethernet</a>.</p>
+<p>More information about how to use the Pluto USB Ethernet from an Android device
+is available in the
+<a href="https://destevez.net/2022/09/connecting-the-pluto-sdr-to-an-android-phone/">Connecting the Pluto SDR to an Android phone</a>
+blog post. One of the key steps is to use</p>
+<pre><code>fw_setenv ipaddr 192.168.xx.1
+</code></pre>
+<p>to change the IP of the Pluto to one in the same subnet used by the Android
+Ethernet tethering.</p>
+<p>The <a href="https://github.com/maia-sdr/maia-sdr/wiki/Android-support">Maia SDR wiki</a>
+contains more information about Android support in different devices.</p>
+<p>In some Android devices, the IP that is used for Ethernet tethering may be
+chosen randomly each time that the device is rebooted. An address from the
+subnet <code>192.168.xxx.0/24</code> is chosen, where <code>xxx</code> can change. To deal with this
+situation, the Maia SDR firmware has an option that is used to assign multiple
+IP addresses to the <code>usb0</code> interface of the Pluto: <code>192.168.0.1/24</code>,
+<code>192.168.1.1/24</code>, <code>192.168.2.1/24</code>, ..., <code>192.168.254.1/24</code>. One of these
+address will be on the correct subnet.</p>
+<p>This option can be enabled with</p>
+<pre><code>fw_setenv ipaddrmulti 1
+</code></pre>
+<p>It can be disabled with</p>
+<pre><code>fw_setenv ipaddrmulti 0
+</code></pre>
+<p>or</p>
+<pre><code>fw_setenv ipaddrmulti
+</code></pre>
+<p>A reboot is necessary to apply these changes.</p>
+<h1 id="open-maia-sdr-in-the-web-browser-and-install-it-as-a-web-app">Open Maia SDR in the web browser and install it as a web app</h1>
+<p>Maia SDR listens on TCP port 8000 using HTTP and on TCP port 443 using HTTPS
+(this is the standard HTTPS port). Once the Pluto has booted up and a USB
+Ethernet or other network connection to the Pluto has been established, we can
+open <a href="http://192.168.2.1:8000"><code>http://192.168.2.1:8000</code></a> or
+<a href="https://192.168.2.1"><code>https://192.168.2.1</code></a> in a web browser (replace the IP
+address by the appropriate address of the Pluto if you have modified it).</p>
+<p>In mobile operating systems such as Android and iOS, web applications (also
+called progressive web apps, or PWAs) can be installed as an icon to the home
+screen. It is recommended to do this for Maia SDR, because the web application
+will not display the web browser toolbar (which occupies precious screen real
+state) when accessed through the home screen icon.
+<a href="https://developer.mozilla.org/en-US/">MDN</a> has some instructions about how to
+<a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Installing">install a web
+app</a>
+in several web browsers. Installing Maia SDR as a PWA must be done by accessing
+Maia SDR over HTTPS (HTTP will not work), and the SSL CA certificate must be
+installed as described in the next section.</p>
+<p>It is not necessary to install Maia SDR as a web app again if the Maia SDR
+firmware image is updated.</p>
+<h1 id="install-the-ssl-ca-certificate-optional">Install the SSL CA certificate (optional)</h1>
+<p>The Maia SDR HTTPS server uses an SSL certificate that is generated when the
+Pluto first boots and stored in a persistent JFFS2 partition in the Pluto
+flash. This SSL certificate is signed by a CA certificate that is generated in
+the same way. Using HTTPS instead of HTTP to access Maia SDR is needed to use
+the following features:</p>
+<ul>
+<li>
+<p>Install Maia SDR as a <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps">Progressive Web
+App</a>
+(PWA). A PWA can be installed to an Android or iOS device (and in some cases
+also to a desktop computer). It enables the Maia SDR web UI to run without
+displaying the web browser bar and other UI elements, which occupy valuable
+screen space. See the <a href="https://www.youtube.com/watch?v=pEthYJoAqII">Maia SDR demo
+video</a> for how this looks
+like. Unfortunately, current web browsers require PWAs to be accessed by HTTPS
+with a certificate signed by a valid CA to be installable. Certificates that
+are accepted manually by the user at the security warning are not allowed,
+except for an app running on <code>localhost</code>, which is an exception for local
+development. This was not the case when Maia SDR was first released in
+2023. It could be installed as a PWA through HTTP on Android Chrome.</p>
+</li>
+<li>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">HTML 5 Geolocation
+API</a>. This
+is used by the Maia SDR web UI to obtain the current location of the device
+(using GPS and other sensors), which is optionally added to the metadata in
+SigMF recordings. Using the Geolocation API requires accessing the web app
+through HTTPS, although any kind of certificate is allowed (as long as the
+user accepts the security warning if the certificate is not signed by a valid
+CA).</p>
+</li>
+</ul>
+<p>To install Maia SDR as a PWA and to avoid security warnings when accessing Maia
+SDR by HTTPS, the Maia SDR CA certificate needs to be installed to the user
+device. There is a security risk associated with installing a CA certificate, so
+this step is optional. The section about <a href="https://maia-sdr.org/installation/ssl-certificates/">SSL
+certificates</a> gives more information about
+how this is done and the associated security considerations.</p>
+<h1 id="differences-between-the-maia-sdr-firmware-and-the-default-adi-firmware">Differences between the Maia SDR firmware and the default ADI firmware</h1>
+<p>The Maia SDR firmware is based on the ADI firmware. The main changes are the
+following:</p>
+<ul>
+<li>The FPGA design has been replaced almost completely. Only the
+<a href="https://wiki.analog.com/resources/fpga/docs/axi_ad9361">ADI AD936x IP core interface</a>
+remains, and its settings have been modified to reduce the resource usage.</li>
+<li>The maia-httpd Maia SDR web server has been added to the rootfs. It is run
+as a daemon.</li>
+<li>The maia-wasm assets have been added to the rootfs.</li>
+<li>A kernel module maia-sdr.ko has been added to the rootfs. It is loaded on
+boot.</li>
+<li>There are some changes to the Device Tree, including reserving most of the
+RAM for communications with the FPGA.</li>
+</ul>
+<p>This means that a Pluto running the Maia SDR firmware cannot be used to
+send/receive IQ samples to an SDR application running on a PC (using either USB
+libiio or USB Ethernet libiio), because the required FPGA components (DMAs,
+FIFOs...) are missing. The default ADI firmware needs to be installed again to
+use the Pluto "normally".</p>
+<p>On the other hand, from the software perspective there are little changes. The
+IP address and other settings are configured in the same way, the same root
+password is used, and almost the same packages are available in the
+rootfs. Users can modify the rootfs to add additional packages or configurations
+in the same way as for the default ADI image.</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>
