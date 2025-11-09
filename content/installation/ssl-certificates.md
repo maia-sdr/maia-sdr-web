@@ -30,18 +30,21 @@ clicking on the Other tab, and clicking on the "CA certificate" link, or by
 going directly to [`https://192.168.2.1/ca.crt`](https://192.168.2.1/ca.crt)
 (using here the IP address assigned to the Pluto).
 
-Then go to the Android Settings and navigate to "Passwords & security > Privacy >
-More security settings > Encryption and credentials > Install a certificate >
-CA certificate". Select "Install anyway" in the security warning, confirm your
-PIN, and choose the downloaded `ca.crt` file. When installing the CA
-certificate, its CN (common name) will be displayed. This contains the serial
-number of the Pluto, which can be checked against the sticker on the back of the
-Pluto for increased security (see below for details).
+Then go to the Android Settings and navigate to "Security and privacy > More
+security and privacy > Encryption and credentials > Install a certificate > CA
+certificate" (this is where the option is in Android 16; it can be in a slightly
+different location in other versions). Select "Install anyway" in the security
+warning, confirm your PIN, and choose the downloaded `ca.crt` file. When
+installing the CA certificate, its CN (common name) will be displayed. This
+contains the serial number of the Pluto, which can be checked against the
+sticker on the back of the Pluto for increased security (see below for details).
 
-The CA certificate can be uninstalled at any time by navigating to "Passwords &
-security > Privacy > More security settings > Encryption and credentials >
-Trusted credentials", selecting the "User" tab, clicking on the Maia SDR
-certificate, and choosing "Uninstall".
+
+The CA certificate can be uninstalled at any time by navigating to "Security and
+privacy > More security and privacy > Encryption and credentials > Trusted
+credentials" (this is where the option is in Android 16; it can be in a slightly
+different location in other versions), selecting the "User" tab, clicking on the
+Maia SDR certificate, and choosing "Uninstall".
 
 # SSL certificate generation process
 
@@ -76,8 +79,9 @@ erased, formatted in JFFS2 and mounted in `/mnt/jffs2`.
 
 5. The certificate signing request is signed with the private CA key. Subject
    Alternative Names (SANs) for all the IP addresses of the form `192.168.*.1`
-   are added to the certificate. The certificate has a validity of 36500 days
-   and a start time near 1970-01-01. The certificate is saved to persistent
+   are added to the certificate, plus the IP address that is configured in the
+   Pluto flash (`fw_printenv ipaddr`). The certificate has a validity of 36500
+   days and a start time near 1970-01-01. The certificate is saved to persistent
    flash in `/mnt/jffs2/maia-httpd.crt`. The CA serial is only saved to RAM in
    `/tmp/maia-sdr-ca.srl`.
 
@@ -94,6 +98,12 @@ HTTPS server. It serves the file `/mnt/jffs2/maia-httpd-ca.crt` over HTTP and
 HTTPS at the URL `/ca.crt`. This is true regardless of whether these
 certificates have been generated automatically by the process described above or
 whether the user has replaced them by other certificates at some point.
+
+The IP address obtained with `fw_printenv ipaddr` is included in the CA and
+server certificate CNs. If this IP address is changed and new certificates for
+the new IP address are needed, the old certificates must be deleted (for
+instance by running `rm -f /mnt/jffs2/maia-*` over ssh) and the Pluto rebooted
+to trigger the certificate generation process for the new IP address.
 
 # Security considerations
 
@@ -126,10 +136,12 @@ this is not done, the user should assume that an attacker that has network
 access to the Pluto can retrieve the HTTPS server private key and
 certificate. Often the Pluto is only exposed to a local network, so the attack
 surface is low. The HTTPS certificate only has SANs for IP addresses of the form
-`192.168.*.1`. This means that if an attacker has this certificate and private
-key, it is only possible for the attacker to set up a man-in-the-middle or fake
-server using one of these IP addresses. Note that the user needs to access the
-malicious site using `https://192.168.*.1/` rather than a DNS name, or the SAN
+`192.168.*.1`, plus the IP address obtained with `fw_printenv ipaddr`, which is
+also supposed to be an RFC 1918 private IP address. This means that if an
+attacker has this certificate and private key, it is only possible for the
+attacker to set up a man-in-the-middle or fake server using one of these IP
+addresses. Note that the user needs to access the malicious site using the IP
+address (for instance `https://192.168.*.1/`) rather than a DNS name, or the SAN
 will not match. Therefore, the possibilities for a feasible attack are rather
 limited. Nevertheless, if this possibility is a concern, the HTTPS private key
 can be kept safe from attackers, by not allowing them to access the Pluto over
