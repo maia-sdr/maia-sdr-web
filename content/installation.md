@@ -252,6 +252,27 @@ this step is optional. The section about [SSL
 certificates](@/installation/ssl-certificates.md) gives more information about
 how this is done and the associated security considerations.
 
+# Using IQEngine without an internet connection
+
+The Maia SDR web server, which includes an standalone IQEngine web application,
+has most of the resources that it needs installed in the Pluto
+firmware. Therefore, the Maia SDR web UI can work without an internet connection
+in the device that is running the UI. The IQEngine web application installed in
+the Pluto firmware does not include
+[Pyodide](https://pyodide.org/en/stable/). This is fetched from the internet by
+the web client. If the web client does not have an internet connection, the
+features of IQEngine that require running custom Python snippets in the web
+browser will not work. There are also some icons and CSS style sheets that are
+fetched from the internet, but the impact of these missing in a client without
+an internet connection is very minor.
+
+Additionally, in certain cases the IQEngine web application fails to load if the
+web client does not have an internet connection. For instance, this happens in
+Firefox if the setting `network.manage-offline-status` in `about:config` is set
+to `true` (which is its default value). It also happens in recent versions of
+both Chrome and Firefox in Android. See [this Github
+issue](https://github.com/maia-sdr/plutosdr-fw/issues/15) for more information.
+
 # Differences between the Maia SDR firmware and the default ADI firmware
 
 The Maia SDR firmware is based on the ADI firmware. The main changes are the
