@@ -1,13 +1,4 @@
-// Styles for the Pluto setup tool (templates/shortcodes/pluto_setup_tool.html).
-// Everything is scoped under #pluto-tool so no site-level files need to
-// change — this file drops in/out as a unit.
-// The tool renders inside `.content.text`, so it inherits Fira Sans, link
-// colour (`--primary-link-color`), and `code` styling from the juice theme.
-
 #pluto-tool {
-  // Local palette. --ok-*/--warn-*/--danger-* aren't defined by the juice
-  // theme; declaring them here keeps them available to every selector nested
-  // under #pluto-tool without leaking to the rest of the site.
   --ok-color: #2a7a2a;
   --ok-bg: #f0faf0;
   --warn-color: #e8a33a;
@@ -27,8 +18,6 @@
   margin: 1rem 0;
   font-size: 0.95rem;
 
-  // Panel headings mirror the h1/.title-text treatment from the juice
-  // theme (left border accent in the theme's primary colour), scaled down.
   h4 {
     margin: 1.25rem 0 0.5rem;
     font-size: 1rem;
@@ -37,9 +26,6 @@
     padding-left: 0.6rem;
   }
 
-  // Button baseline — the juice theme leaves <button> browser-default, so
-  // style them consistently within the tool. Hover tint derives from the
-  // site's --primary-color so it rhymes with the rest of the site.
   button {
     background: var(--secondary-color);
     color: var(--primary-text-color);
@@ -61,9 +47,8 @@
     }
   }
 
-  // :not([hidden]) so the `hidden` attribute (which toggles visibility from
-  // JS) isn't overridden by our `display: flex`. Same treatment on the error
-  // banner below.
+  // :not([hidden]) so toggling the `hidden` attribute from JS isn't
+  // overridden by `display: flex`.
   .pt-controls:not([hidden]),
   .pt-login:not([hidden]) {
     display: flex;
@@ -241,8 +226,8 @@
   .pt-confirm-host {
     margin: 0.5rem 0;
 
-    // When the host is a <tr> (placed inside a tbody), suppress table-cell
-    // borders so the strip looks standalone.
+    // When the host is a <tr> inside a tbody, drop cell borders so the
+    // strip reads as a standalone row.
     > td {
       padding: 0.5rem 0;
       border: none;
