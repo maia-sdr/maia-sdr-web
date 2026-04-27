@@ -1,0 +1,303 @@
+#pluto-tool {
+  --ok-color: #2a7a2a;
+  --ok-bg: #f0faf0;
+  --warn-color: #e8a33a;
+  --warn-bg: #fdf6ec;
+  --danger-color: #d94a4a;
+  --danger-bg: #fdecea;
+  --pt-border: #ddd;
+  --pt-border-soft: #eee;
+  --pt-muted-bg: #f7f7f7;
+  --pt-log-bg: #111;
+  --pt-log-fg: #ddd;
+  --pt-log-tx: #6cf;
+
+  border: 1px solid var(--pt-border);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+
+  h4 {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-left: var(--primary-color) 4px solid;
+    padding-left: 0.6rem;
+  }
+
+  button {
+    background: var(--secondary-color);
+    color: var(--primary-text-color);
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0.35rem 0.8rem;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--primary-color) 25%, var(--secondary-color));
+      border-color: color-mix(in srgb, var(--primary-color) 60%, #ccc);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // :not([hidden]) so toggling the `hidden` attribute from JS isn't
+  // overridden by `display: flex`.
+  .pt-controls:not([hidden]),
+  .pt-login:not([hidden]) {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .pt-login {
+    margin-top: 0.75rem;
+  }
+
+  #pt-status {
+    margin-left: 0.5rem;
+    color: var(--secondary-text-color);
+    font-family: monospace;
+  }
+
+  .pt-panel {
+    border-top: 1px dashed var(--pt-border);
+    padding-top: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .pt-panel-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  // --- Tables ---
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  th, td {
+    border: 1px solid var(--pt-border-soft);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--pt-muted-bg);
+  }
+
+  .pt-value {
+    font-family: monospace;
+    word-break: break-all;
+    max-width: 28rem;
+  }
+
+  .pt-row-ok td   { background: var(--ok-bg); }
+  .pt-row-warn td { background: var(--warn-bg); }
+
+  .pt-multi-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  input[aria-invalid="true"] {
+    border: 1px solid var(--danger-color);
+    outline-color: var(--danger-color);
+    background: color-mix(in srgb, var(--danger-bg) 60%, white);
+  }
+
+  // --- USB mode matrix ---
+
+  #pt-usb-matrix {
+    td, th { text-align: center; }
+    td:nth-child(2) {
+      text-align: left;
+      font-weight: 500;
+    }
+  }
+
+  .pt-usb-yes {
+    color: var(--ok-color);
+    font-weight: bold;
+  }
+
+  .pt-usb-no {
+    color: var(--danger-color);
+  }
+
+  // --- /opt/config.txt editor ---
+
+  #pt-cfg-textarea {
+    width: 100%;
+    min-height: 14rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+  }
+
+  // --- Firmware info ---
+
+  #pt-fw-info {
+    background: var(--pt-muted-bg);
+    padding: 0.5rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+  }
+
+  // --- Serial log ---
+
+  details {
+    margin-top: 1rem;
+  }
+
+  #pt-log {
+    background: var(--pt-log-bg);
+    color: var(--pt-log-fg);
+    padding: 0.5rem;
+    max-height: 18rem;
+    overflow: auto;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .pt-log-tx { color: var(--pt-log-tx); }
+  .pt-log-rx { color: var(--pt-log-fg); }
+
+  // --- Browser-unsupported warning & sticky error banner ---
+
+  #pt-browser-warning,
+  .pt-error-banner {
+    background: var(--danger-bg);
+    border: 1px solid color-mix(in srgb, var(--danger-color) 40%, white);
+    padding: 0.75rem;
+    border-radius: 4px;
+  }
+
+  .pt-error-banner:not([hidden]) {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .pt-error-banner {
+    .pt-error-msg {
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .pt-error-dismiss {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      line-height: 1;
+      padding: 0 0.3rem;
+      color: var(--danger-color);
+    }
+  }
+
+  small.pt-note {
+    color: var(--secondary-text-color);
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  // --- Inline confirmation strip ---
+
+  .pt-confirm-host {
+    margin: 0.5rem 0;
+
+    // When the host is a <tr> inside a tbody, drop cell borders so the
+    // strip reads as a standalone row.
+    > td {
+      padding: 0.5rem 0;
+      border: none;
+    }
+  }
+
+  .pt-confirm-strip {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: var(--warn-bg);
+    border: 1px solid color-mix(in srgb, var(--warn-color) 50%, white);
+    border-left: 4px solid var(--warn-color);
+    border-radius: 4px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .pt-confirm-danger {
+    background: var(--danger-bg);
+    border-color: color-mix(in srgb, var(--danger-color) 50%, white);
+    border-left-color: var(--danger-color);
+  }
+
+  .pt-confirm-text {
+    flex: 1;
+    min-width: 12rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .pt-confirm-msg {
+    word-break: break-word;
+  }
+
+  .pt-confirm-detail {
+    margin: 0;
+    background: var(--secondary-color);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    border-radius: 3px;
+    padding: 0.4rem 0.6rem;
+    max-height: 9rem;
+    overflow: auto;
+    font-family: monospace;
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .pt-confirm-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .pt-confirm-cancel {
+    background: transparent;
+  }
+
+  .pt-confirm-ok {
+    background: var(--danger-color);
+    color: #fff;
+    border: 1px solid color-mix(in srgb, var(--danger-color) 80%, black);
+    font-weight: 500;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--danger-color) 90%, black);
+      border-color: color-mix(in srgb, var(--danger-color) 70%, black);
+    }
+  }
+}

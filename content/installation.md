@@ -76,6 +76,11 @@ to follow these steps once. Afterwards, newer versions of the Maia SDR
 
 All the following commands should be run in the Pluto via ssh or serial.
 
+Alternatively, the [ADALM-Pluto Setup
+Utility](@/installation/pluto-setup-tool.md) runs the same `fw_printenv` checks
+and `fw_setenv` commands from a Chromium-based web browser using the Web
+Serial API.
+
 To check if the u-boot environment variables have been modified already to allow
 Maia SDR to be used, we can run
 ```
