@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ADALM-Pluto Setup Utility | Maia SDR </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/maia-icon-32x32.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/maia-icon-128x128.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/maia-icon-180x180.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/maia-icon-192x192.png">
+
+    <style>
+    :root {
+        /* Primary theme color */
+        --primary-color: #d0d0ff;
+        /* Primary theme text color */
+        --primary-text-color: black;
+        /* Primary theme link color */
+        --primary-link-color: #2020a0;
+        /* Secondary color: the background body color */
+        --secondary-color: white;
+        --secondary-text-color: #303030;
+        /* Highlight text color of table of content */
+        --toc-highlight-text-color: #4040ff;
+    }
+</style>
+
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/normalize.css">
+    <link rel="stylesheet" href="https://maia-sdr.org/juice.css">
+    
+    
+</head>
+
+<body>
+    
+<header class="box-shadow">
+    
+
+<a href="https://maia-sdr.org/">
+    <div class="logo">
+        <img src="https://maia-sdr.org/maia-icon-192x192.png" alt="logo">
+        Maia SDR
+    </div>
+</a>
+
+<nav>
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/installation/">Installation</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/waterfall-demo/">Waterfall demo</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/about/">About</a>
+    
+    
+    
+    <a class="nav-item subtitle-text" href="https://maia-sdr.org/faq/">FAQ</a>
+    
+    
+    
+</nav>
+
+</header>
+
+
+    <main>
+        
+        
+        <div class="toc">
+	    
+        </div>
+        
+
+        <div class="content text">
+            
+<div class="heading-text">ADALM-Pluto Setup Utility</div>
+<p>This page uses the WebSerial API to change u-boot environmental variables and network settings of the ADALM-Pluto.
+<link rel="stylesheet" href="https://maia-sdr.org/pluto-setup-tool.css">
+<div id="pluto-tool">
+  <div id="pt-browser-warning" hidden>
+    Your browser does not support the Web Serial API. Use a recent Chromium-based browser (Chrome, Edge, or Opera) on a desktop OS to use this tool. The manual <code>fw_setenv</code> instructions below remain available as an alternative.
+  </div>
+  <div class="pt-controls">
+    <button id="pt-connect">Connect to Pluto</button>
+    <button id="pt-disconnect" disabled>Disconnect</button>
+    <span id="pt-status" aria-live="polite" aria-atomic="true">Disconnected</span>
+  </div>
+  <div id="pt-error" class="pt-error-banner" role="alert" hidden>
+    <span class="pt-error-msg"></span>
+    <button class="pt-error-dismiss" type="button" aria-label="Dismiss error">×</button>
+  </div>
+  <div class="pt-login" hidden>
+    <label>User: <input id="pt-user" value="root" size="8"></label>
+    <label>Password: <input id="pt-pass" type="password" value="analog" size="10"></label>
+    <button id="pt-login">Log in</button>
+  </div>
+
+  <div class="pt-post-login" hidden>
+
+    <section class="pt-panel">
+      <h4>U-boot environment for Maia SDR</h4>
+      <div class="pt-panel-actions">
+        <button id="pt-check">Read &amp; check u-boot environment</button>
+        <button id="pt-reset-overrides">Unset maia-sdr overrides</button>
+      </div>
+      <table id="pt-results" hidden>
+        <thead>
+          <tr><th>Env var</th><th>Current value</th><th>Status</th><th>Required</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <small class="pt-note">"Unset maia-sdr overrides" clears <code>ramboot_verbose</code>, <code>qspiboot_verbose</code>, and <code>qspiboot</code> so the bootloader defaults apply again. You do not need to clear these before reverting to stock ADI firmware — the <code>uio_pdrv_genirq</code> kernel argument is a no-op there. <code>attr_name</code>, <code>attr_val</code>, and <code>mode</code> are left in place because they describe your hardware regardless of firmware.</small>
+    </section>
+
+    <section class="pt-panel">
+      <h4>Networking (u-boot environment)</h4>
+      <div class="pt-panel-actions">
+        <button id="pt-net-read">Read networking variables</button>
+      </div>
+      <table id="pt-net-table" hidden>
+        <thead>
+          <tr><th>Variable</th><th>Value</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="pt-net-multi" class="pt-multi-row" hidden>
+        <label><input type="checkbox" id="pt-net-multi-cb"> <code>ipaddrmulti</code> (assign 192.168.x.1/24 across many subnets — useful for Android tethering)</label>
+        <button id="pt-net-multi-apply">Apply</button>
+      </div>
+      <small class="pt-note">Leave a field blank and click Apply to unset the variable (falls back to the bootloader default). A reboot is required for any change to take effect.</small>
+    </section>
+
+    <section class="pt-panel">
+      <h4>USB ethernet compatibility mode</h4>
+      <div class="pt-panel-actions">
+        <button id="pt-usb-read">Read current mode</button>
+        <button id="pt-usb-apply">Apply selected mode</button>
+      </div>
+      <div id="pt-usb-container" hidden>
+        <table id="pt-usb-matrix"></table>
+      </div>
+      <small class="pt-note">Pick the row matching your host OS. Writes the u-boot <code>usb_ethernet_mode</code> variable (<code>rndis</code> / <code>ncm</code> / <code>ecm</code>). A reboot is required to apply the change. RNDIS is the firmware default; unset also means RNDIS.</small>
+    </section>
+
+    <section class="pt-panel">
+      <h4>Raw <code>/opt/config.txt</code> editor</h4>
+      <div class="pt-panel-actions">
+        <button id="pt-cfg-read">Read /opt/config.txt</button>
+        <button id="pt-cfg-save">Save /opt/config.txt</button>
+      </div>
+      <div id="pt-cfg-editor" hidden>
+        <textarea id="pt-cfg-textarea" spellcheck="false"></textarea>
+      </div>
+      <small class="pt-note">Escape hatch for settings that aren't exposed as their own control (hostname, per-interface IPs, <code>xo_correction</code>, etc.). USB ethernet mode is better set from the panel above — it uses the u-boot env and doesn't need a file write. Saves go via chunked base64 upload so any content is safe. A reboot is required for changes to take effect.</small>
+    </section>
+
+    <section class="pt-panel">
+      <h4>Firmware &amp; device info</h4>
+      <div class="pt-panel-actions">
+        <button id="pt-fw-read">Read device info</button>
+      </div>
+      <pre id="pt-fw-info" hidden></pre>
+      <small class="pt-note">
+        In-browser firmware flashing is not implemented. To switch between Maia SDR and stock ADI firmware, download the firmware image and drag <code>pluto.frm</code> onto the Pluto USB mass-storage device, then eject it:
+        <ul>
+          <li><a href="https://github.com/maia-sdr/plutosdr-fw/releases/latest" target="_blank" rel="noopener">Maia SDR Pluto firmware (latest)</a></li>
+          <li><a href="https://github.com/analogdevicesinc/plutosdr-fw/releases/latest" target="_blank" rel="noopener">Stock ADI Pluto firmware (latest)</a></li>
+        </ul>
+      </small>
+    </section>
+
+  </div>
+
+  <details>
+    <summary>Serial console log</summary>
+    <pre id="pt-log"></pre>
+  </details>
+</div>
+<script defer src="https://maia-sdr.org/js/pluto-setup-tool.js"></script>
+</p>
+
+
+        </div>
+
+        
+        
+    </main>
+
+    
+    <footer>
+        <small class="subtext">
+            <a href="https://maia-sdr.org">Maia SDR</a> — <a href="mailto:info@maia-sdr.org">info@maia-sdr.org</a>
+        </small>
+        <small class="subtext">
+            Copyright <a href="https://destevez.net">Daniel Estévez</a>
+        </small>
+    </footer>
+
+<script>
+    const scrollHandler = entries => {
+        // Find the first entry which intersecting and ratio > 0.9 to highlight.
+        let entry = entries.find(entry => {
+            return entry.isIntersecting && entry.intersectionRatio > 0.9;
+        });
+        if (!entry) return;
+
+        document.querySelectorAll(".toc a").forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        // let url = new URL(`#${entry.target.id}`);
+        let link = document.querySelector(`.toc a[href$="${decodeURIComponent(`#${entry.target.id}`)}"]`)
+        if (link) {
+            link.classList.add("active");
+            link.scrollIntoView({ behavior: "auto", block: "nearest" });
+        }
+    };
+    // Set -100px root margin to improve highlight experience.
+    const observer = new IntersectionObserver(scrollHandler, { threshold: 1 });
+    let items = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    items.forEach(item => observer.observe(item));
+</script>
+</body>
+</html>
