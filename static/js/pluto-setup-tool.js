@@ -48,10 +48,25 @@
     return (((inv & (inv + 1)) >>> 0) === 0);
   }
 
+  // Single RFC 1123 hostname label: alphanumerics and hyphens, 1–63 chars, not
+  // starting or ending with a hyphen.
+  function isValidHostname(s) {
+    return /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/.test(s);
+  }
+
   const NETWORKING_FIELDS = [
+    { key: 'hostname',    label: 'Hostname',                        placeholder: 'pluto',         validate: isValidHostname, hint: 'letters, digits, hyphens (e.g. pluto)' },
     { key: 'ipaddr',      label: 'Pluto IP (ipaddr)',               placeholder: '192.168.2.1',   validate: isValidIpv4,    hint: 'dotted-quad IPv4 (e.g. 192.168.2.1)' },
     { key: 'netmask',     label: 'Netmask',                         placeholder: '255.255.255.0', validate: isValidNetmask, hint: 'contiguous-bits mask (e.g. 255.255.255.0, 255.255.254.0)' },
     { key: 'ipaddr_host', label: 'Suggested host IP (ipaddr_host)', placeholder: '192.168.2.10',  validate: isValidIpv4,    hint: 'dotted-quad IPv4 (e.g. 192.168.2.10)' },
+  ];
+
+  // A separate wired Ethernet interface (USB-to-Ethernet dongle, or the Pluto+
+  // RJ45), distinct from the usb0 gadget `ipaddr`. The [USB_ETHERNET] section
+  // of config.txt, backed by the u-boot env vars ipaddr_eth / netmask_eth.
+  const USB_ETH_FIELDS = [
+    { key: 'ipaddr_eth',  label: 'Interface IP (ipaddr_eth)', placeholder: 'blank = DHCP',   validate: isValidIpv4,    hint: 'dotted-quad IPv4, or blank for DHCP' },
+    { key: 'netmask_eth', label: 'Netmask (netmask_eth)',     placeholder: '255.255.255.0', validate: isValidNetmask, hint: 'contiguous-bits mask (e.g. 255.255.255.0)' },
   ];
 
   // USB ethernet compatibility mode, per the ADI Pluto customization wiki.
@@ -113,14 +128,22 @@
 
     async disconnect() {
       this._intentionalClose = true;
-      try { await this.reader?.cancel(); } catch (_) {}
-      try { await this.writer?.close(); } catch (_) {}
-      try { await this._readableClosed; } catch (_) {}
-      try { await this._writableClosed; } catch (_) {}
-      try { await this.port?.close(); } catch (_) {}
+      // Capture handles before cancelling the reader: reader.cancel() unblocks
+      // _pump(), which nulls this.reader/writer/port as it exits. If we read
+      // those fields after the cancel, writer/port would already be null and we
+      // would skip closing them — leaving _writableClosed unresolved and this
+      // method hanging forever. Operate on locals so the teardown always runs.
+      const { reader, writer, port } = this;
+      const readableClosed = this._readableClosed;
+      const writableClosed = this._writableClosed;
       this.port = null;
       this.reader = null;
       this.writer = null;
+      try { await reader?.cancel(); } catch (_) {}
+      try { await writer?.close(); } catch (_) {}
+      try { await readableClosed; } catch (_) {}
+      try { await writableClosed; } catch (_) {}
+      try { await port?.close(); } catch (_) {}
     }
 
     async _send(s) {
@@ -168,18 +191,25 @@
 
     async _doExec(cmd, timeoutMs) {
       if (!this.writer) throw new Error('Not connected');
-      const sentinel = 'MAIA_DONE_' + Math.random().toString(36).slice(2, 10);
-      // `2>&1` merges stderr so that tool error messages (e.g. `fw_setenv:
-      // Can't set keys...`) surface to JS. `$?` is expanded before `echo`
-      // runs, so it captures the exit code of `cmd`, not the merge.
-      const fullCmd = `{ ${cmd}; } 2>&1; echo ${sentinel}$?`;
+      const rand = Math.random().toString(36).slice(2, 10);
+      const startMark = 'MAIA_START_' + rand;
+      const sentinel = 'MAIA_DONE_' + rand;
+      // Bracket the output with marker echoes. `2>&1` merges stderr so that
+      // tool error messages (e.g. `fw_setenv: Can't set keys...`) surface to
+      // JS. `$?` is expanded before `echo` runs, so it captures the exit code
+      // of `cmd` — not the leading start echo or the merge.
+      const fullCmd = `echo ${startMark}; { ${cmd}; } 2>&1; echo ${sentinel}$?`;
       this.buffer = '';
       await this._send(fullCmd + '\r\n');
       const sentinelRe = new RegExp(sentinel + '(\\d+)');
       const match = await this._waitFor(b => b.match(sentinelRe), timeoutMs);
+      // Slice between the *printed* start marker and the sentinel. Keying off a
+      // short marker the shell prints on its own line — rather than matching
+      // the echoed command — stays robust when the console wraps a long command
+      // line. lastIndexOf skips the marker's copy inside the echoed command.
       let out = this.buffer.slice(0, match.index);
-      const echoIdx = out.indexOf(fullCmd);
-      if (echoIdx !== -1) out = out.slice(echoIdx + fullCmd.length);
+      const sIdx = out.lastIndexOf(startMark);
+      if (sIdx !== -1) out = out.slice(sIdx + startMark.length);
       return {
         stdout: out.replace(/^\r?\n/, '').replace(/\r?\n$/, ''),
         exitCode: parseInt(match[1], 10),
@@ -233,34 +263,6 @@
     const { stdout, exitCode } = await serial.exec(`cat ${shellSingleQuote(path)}`, 10000);
     if (exitCode !== 0) throw new Error(`Failed to read ${path} (exit ${exitCode})`);
     return stdout;
-  }
-
-  // Upload a file by streaming its base64 encoding to a temp file in chunks,
-  // then decoding in place. Chunked so we stay under the busybox shell's input
-  // line limit. 2 KB per chunk keeps a typical /opt/config.txt (1–2 KB) to one
-  // or two round trips.
-  async function writeFile(serial, path, contents) {
-    const b64 = utf8ToBase64(contents);
-    const tmp = `/tmp/.maia_write_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    const qTmp = shellSingleQuote(tmp);
-    const qPath = shellSingleQuote(path);
-    let r = await serial.exec(`: > ${qTmp}`, 5000);
-    if (r.exitCode !== 0) throw new Error('Could not create temp file');
-    const CHUNK = 2048;
-    for (let i = 0; i < b64.length; i += CHUNK) {
-      const chunk = b64.slice(i, i + CHUNK);
-      r = await serial.exec(`printf %s '${chunk}' >> ${qTmp}`, 5000);
-      if (r.exitCode !== 0) throw new Error('Failed to append file chunk');
-    }
-    r = await serial.exec(`base64 -d < ${qTmp} > ${qPath} && rm ${qTmp}`, 10000);
-    if (r.exitCode !== 0) throw new Error(`base64 decode/write to ${path} failed`);
-  }
-
-  function utf8ToBase64(s) {
-    const bytes = new TextEncoder().encode(s);
-    let bin = '';
-    for (const b of bytes) bin += String.fromCharCode(b);
-    return btoa(bin);
   }
 
   function sleep(ms) {
@@ -378,6 +380,7 @@
     if (!('serial' in navigator)) {
       $('#pt-browser-warning').hidden = false;
       $('.pt-controls').hidden = true;
+      $('details').hidden = true;
       return;
     }
 
@@ -471,7 +474,8 @@
     setupUbootPanel(root, serial, setStatus, showError, clearError);
     setupNetworkingPanel(root, serial, setStatus, showError, clearError);
     setupUsbModePanel(root, serial, setStatus, showError, clearError);
-    setupConfigTxtPanel(root, serial, setStatus, showError, clearError);
+    setupUsbEthPanel(root, serial, setStatus, showError, clearError);
+    setupConfigTxtPanel(root, serial, setStatus);
     setupFirmwarePanel(root, serial, setStatus);
 
     setState('disconnected', 'Disconnected');
@@ -567,6 +571,66 @@
     }
   }
 
+  // Render one editable row per field into `body`: label, validated input, and
+  // an Apply button that writes the field's u-boot env var via fw_setenv. A
+  // blank input unsets the variable (falls back to the bootloader default).
+  // Shared by the networking and USB-ethernet panels.
+  function renderEnvFieldRows(body, fields, values, ctx) {
+    const { serial, setStatus, showError, clearError } = ctx;
+    for (const f of fields) {
+      const tr = document.createElement('tr');
+      tr.appendChild(td(f.label));
+
+      const tdInput = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = values[f.key] || '';
+      input.placeholder = f.placeholder;
+      input.size = 18;
+      tdInput.appendChild(input);
+      tr.appendChild(tdInput);
+
+      // Blank is valid (means unset); otherwise run the per-field validator.
+      // Mark aria-invalid + tooltip hint so the red border and screen readers
+      // both reflect the state.
+      const revalidate = () => {
+        const v = input.value.trim();
+        const bad = v !== '' && f.validate && !f.validate(v);
+        input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+        input.title = bad ? `Expected: ${f.hint}` : '';
+      };
+      input.addEventListener('blur', revalidate);
+      input.addEventListener('input', () => {
+        // clear any previous error decoration as the user edits
+        if (input.getAttribute('aria-invalid') === 'true') revalidate();
+      });
+
+      const tdAction = document.createElement('td');
+      const btn = document.createElement('button');
+      btn.textContent = 'Apply';
+      btn.addEventListener('click', async () => {
+        const newVal = input.value.trim();
+        if (newVal !== '' && f.validate && !f.validate(newVal)) {
+          input.setAttribute('aria-invalid', 'true');
+          setStatus(`${f.key}: "${newVal}" invalid — expected ${f.hint}`);
+          input.focus();
+          return;
+        }
+        input.setAttribute('aria-invalid', 'false');
+        clearError();
+        await runAction(btn, setStatus, {
+          pending: `Setting ${f.key}…`,
+          success: `${f.key} updated — reboot required`,
+          failure: `${f.key} failed`,
+          onError: showError,
+        }, () => setEnv(serial, f.key, newVal === '' ? null : newVal));
+      });
+      tdAction.appendChild(btn);
+      tr.appendChild(tdAction);
+      body.appendChild(tr);
+    }
+  }
+
   // --- Networking panel ---
 
   function setupNetworkingPanel(root, serial, setStatus, showError, clearError) {
@@ -588,58 +652,7 @@
 
     function renderNet(values) {
       body.innerHTML = '';
-      for (const f of NETWORKING_FIELDS) {
-        const tr = document.createElement('tr');
-        tr.appendChild(td(f.label));
-
-        const tdInput = document.createElement('td');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = values[f.key] || '';
-        input.placeholder = f.placeholder;
-        input.size = 18;
-        tdInput.appendChild(input);
-        tr.appendChild(tdInput);
-
-        // Blank is valid (means unset); otherwise run the per-field validator.
-        // Mark aria-invalid + tooltip hint so the red border and screen
-        // readers both reflect the state.
-        const revalidate = () => {
-          const v = input.value.trim();
-          const bad = v !== '' && f.validate && !f.validate(v);
-          input.setAttribute('aria-invalid', bad ? 'true' : 'false');
-          input.title = bad ? `Expected: ${f.hint}` : '';
-        };
-        input.addEventListener('blur', revalidate);
-        input.addEventListener('input', () => {
-          // clear any previous error decoration as the user edits
-          if (input.getAttribute('aria-invalid') === 'true') revalidate();
-        });
-
-        const tdAction = document.createElement('td');
-        const btn = document.createElement('button');
-        btn.textContent = 'Apply';
-        btn.addEventListener('click', async () => {
-          const newVal = input.value.trim();
-          if (newVal !== '' && f.validate && !f.validate(newVal)) {
-            input.setAttribute('aria-invalid', 'true');
-            setStatus(`${f.key}: "${newVal}" invalid — expected ${f.hint}`);
-            input.focus();
-            return;
-          }
-          input.setAttribute('aria-invalid', 'false');
-          clearError();
-          await runAction(btn, setStatus, {
-            pending: `Setting ${f.key}…`,
-            success: `${f.key} updated — reboot required`,
-            failure: `${f.key} failed`,
-            onError: showError,
-          }, () => setEnv(serial, f.key, newVal === '' ? null : newVal));
-        });
-        tdAction.appendChild(btn);
-        tr.appendChild(tdAction);
-        body.appendChild(tr);
-      }
+      renderEnvFieldRows(body, NETWORKING_FIELDS, values, { serial, setStatus, showError, clearError });
       table.hidden = false;
       multiCheckbox.checked = values.ipaddrmulti === '1';
       multiRow.hidden = false;
@@ -654,6 +667,30 @@
         onError: showError,
       }, () => setEnv(serial, 'ipaddrmulti', multiCheckbox.checked ? '1' : null));
     });
+  }
+
+  // --- Wired Ethernet adapter (ipaddr_eth) panel ---
+  //
+  // Sets the IP of a separate wired Ethernet interface (USB-to-Ethernet dongle
+  // or Pluto+ RJ45) via the u-boot env (ipaddr_eth / netmask_eth — the
+  // [USB_ETHERNET] section of config.txt), distinct from the usb0 gadget
+  // `ipaddr` in the "USB connection to host" panel.
+
+  function setupUsbEthPanel(root, serial, setStatus, showError, clearError) {
+    const readBtn = root.querySelector('#pt-usbeth-read');
+    const table = root.querySelector('#pt-usbeth-table');
+    const body = table.querySelector('tbody');
+
+    readBtn.addEventListener('click', () => runAction(readBtn, setStatus, {
+      pending: 'Reading Ethernet adapter variables…',
+      success: 'Ethernet adapter variables read',
+      failure: 'Read failed',
+    }, async () => {
+      const values = await readEnv(serial, USB_ETH_FIELDS.map(f => f.key));
+      body.innerHTML = '';
+      renderEnvFieldRows(body, USB_ETH_FIELDS, values, { serial, setStatus, showError, clearError });
+      table.hidden = false;
+    }));
   }
 
   // --- USB ethernet mode panel ---
@@ -749,35 +786,19 @@
 
   const CONFIG_TXT_PATH = '/opt/config.txt';
 
-  function setupConfigTxtPanel(root, serial, setStatus, showError, clearError) {
+  function setupConfigTxtPanel(root, serial, setStatus) {
     const readBtn = root.querySelector('#pt-cfg-read');
-    const saveBtn = root.querySelector('#pt-cfg-save');
     const textarea = root.querySelector('#pt-cfg-textarea');
     const editorWrap = root.querySelector('#pt-cfg-editor');
 
     readBtn.addEventListener('click', () => runAction(readBtn, setStatus, {
       pending: `Reading ${CONFIG_TXT_PATH}…`,
-      success: `${CONFIG_TXT_PATH} loaded — edit and save`,
+      success: `${CONFIG_TXT_PATH} loaded`,
       failure: 'Read failed',
     }, async () => {
       textarea.value = await readFile(serial, CONFIG_TXT_PATH);
       editorWrap.hidden = false;
     }));
-
-    saveBtn.addEventListener('click', async () => {
-      const ok = await askConfirm(saveBtn.closest('.pt-panel-actions'), {
-        message: `Overwrite ${CONFIG_TXT_PATH} with the edited contents. A reboot is required to apply.`,
-        confirmLabel: 'Save',
-      });
-      if (!ok) return;
-      clearError();
-      await runAction(saveBtn, setStatus, {
-        pending: `Writing ${CONFIG_TXT_PATH}…`,
-        success: `${CONFIG_TXT_PATH} saved — reboot required`,
-        failure: 'Save failed',
-        onError: showError,
-      }, () => writeFile(serial, CONFIG_TXT_PATH, textarea.value));
-    });
   }
 
   // --- Firmware info panel ---
