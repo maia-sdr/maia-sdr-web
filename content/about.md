@@ -1,7 +1,7 @@
 +++
 title = "About"
 description = "About Maia SDR"
-weight = 3
+weight = 5
 +++
 
 Maia SDR is an open-source project started by [Daniel
