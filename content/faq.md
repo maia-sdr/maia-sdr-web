@@ -1,7 +1,7 @@
 +++
 title = "FAQ"
 description = "FAQ"
-weight = 4
+weight = 6
 +++
 
 # Why the name "Maia SDR"?

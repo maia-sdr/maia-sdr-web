@@ -1,7 +1,7 @@
 +++
 title = "Waterfall demo"
 description = "Demo of the Maia SDR waterfall"
-weight = 2
+weight = 4
 +++
 
 <style>
