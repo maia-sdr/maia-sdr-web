@@ -141,7 +141,7 @@
     color: var(--danger-color);
   }
 
-  // --- /opt/config.txt editor ---
+  // --- /opt/config.txt viewer ---
 
   #pt-cfg-textarea {
     width: 100%;
@@ -219,6 +219,11 @@
     color: var(--secondary-text-color);
     display: block;
     margin-top: 0.25rem;
+
+    // Tighten inline-code chips so var-dense notes don't read as chunky.
+    code {
+      padding: 0.05em 0.3em;
+    }
   }
 
   // --- Inline confirmation strip ---
