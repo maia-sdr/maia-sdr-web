@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: shalzz/zola-deploy-action@v0.19.2
+      - uses: shalzz/zola-deploy-action@v0.22.1
         env:
           # Target branch
           PAGES_BRANCH: gh-pages

@@ -11,11 +11,6 @@ theme = "juice"
 
 title = "Maia SDR"
 
-[markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = false
-
 [extra]
 # Put all your custom variables here
 juice_logo_name = "Maia SDR"
