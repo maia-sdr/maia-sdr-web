@@ -5,7 +5,7 @@
     "Daniel Estevez <daniel@destevez.net>"
   ],
   "description": "Maia SDR waterfall example",
-  "version": "0.1.2",
+  "version": "0.3.1",
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
